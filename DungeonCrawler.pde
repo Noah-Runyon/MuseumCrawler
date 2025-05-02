@@ -22,14 +22,14 @@ SceneTitle sceneTitle;
 SceneInstructions sceneInstructions;
 ScenePlay scenePlay;
 SceneGameOver sceneGameOver;
-//SceneLevelUpMenu sceneLevelUpMenu;
+SceneLevelUpMenu sceneLevelUpMenu;
 
 float enemySpawnDelay = 1;
 
 void setup() {
   size(1280, 720); // 1000, 800 default
 
-  switchToPlay(); // Switch to ScenePlay at the start
+  switchToTitle(); // Switch to ScenePlay at the start
 }
 
 void draw() {
@@ -59,11 +59,11 @@ void draw() {
     if (sceneGameOver != null) sceneGameOver.draw();
   }
 
-  // Level Up Menu:
-  //if (sceneLevelUpMenu != null) {
-  //  //sceneLevelUpMenu.update();
-  //  //if (sceneLevelUpMenu != null) sceneLevelUpMenu.draw();
-  //}
+  //Level Up Menu:
+  if (sceneLevelUpMenu != null) {
+    sceneLevelUpMenu.update();
+    if (sceneLevelUpMenu != null) sceneLevelUpMenu.draw();
+  }
 
   // Prep for next frame after this line:
 
@@ -95,7 +95,7 @@ void switchToTitle() {
   sceneInstructions = null;
   scenePlay = null;
   sceneGameOver = null;
-  //sceneLevelUpMenu = null;
+  sceneLevelUpMenu = null;
 }
 
 // Switch to Instructions:
@@ -104,7 +104,7 @@ void switchToInstructions() {
   sceneInstructions = new SceneInstructions();
   scenePlay = null;
   sceneGameOver = null;
-  //sceneLevelUpMenu = null;
+  sceneLevelUpMenu = null;
 }
 
 // Switch to Play:
@@ -113,7 +113,7 @@ void switchToPlay() {
   sceneInstructions = null;
   scenePlay = new ScenePlay();
   sceneGameOver = null;
-  //sceneLevelUpMenu = null;
+  sceneLevelUpMenu = null;
 }
 
 // Switch to GameOver:
@@ -122,15 +122,16 @@ void switchToGameOver() {
   sceneInstructions = null;
   scenePlay = null;
   sceneGameOver = new SceneGameOver();
-  //sceneLevelUpMenu = null;
+  sceneLevelUpMenu = null;
 }
 
+// Switch to Level Up:
 void switchToLevelUpMenu() {
   sceneTitle = null;
   sceneInstructions = null;
   //scenePlay = ScenePlay();
   sceneGameOver = null;
-  //sceneLevelUpMenu = new SceneLevelUpMenu();
+  sceneLevelUpMenu = new SceneLevelUpMenu();
 }
 
 // ZOOM effect:

@@ -6,6 +6,10 @@ class Player extends AABB { // Class player extends AABB, because the player has
 
   int runCounter = 0; // Set runCounter to 0
   int runIndex = 0; // Set runIndex to 0
+  
+  //PImage johnImage;
+  
+  //int size;
 
   //float x, y; // DELETE THESE WHEN YOU EXTEND FROM AABB.
   float w = 100, h = 100; // DELETE THESE WHEN YOU EXTEND FROM AABB.
@@ -51,7 +55,7 @@ class Player extends AABB { // Class player extends AABB, because the player has
     coin = new CoinsSystem(); // Make take a String data for saves
 
     for (int i = 0; i < runImages.length; i++) {
-      runImages[i] = loadImage("player_sprites/player_sprite00" + (i+1) + ".png"); // Load the images in a cycle
+      runImages[i] = loadImage("player_sprites/john_armed_" + (i+1) + ".png"); // Load the images in a cycle
       runImages[i].resize(75 + (width * 1/35), 75 + (height * 1/35)); // Resize the player imagess to a proper size
     }
   }
@@ -172,11 +176,17 @@ class Player extends AABB { // Class player extends AABB, because the player has
   //}
 
   void draw() {
+    // Draw the player:
+    //johnImage = loadImage("player_sprites/john_1.png");
+    //size = (radius * 2 >= 1) ? int(radius * 2) : 1; // If radius is less than 1, set it to 1
+    //johnImage.resize(size, size);
+    //image(johnImage, x-size/2, y-size/2);
+    
     fill(#26DE30);
     pushMatrix();
     translate(x, y);
     //rotate(angleToMouse); // Rotate the image towards the mouse
-    rotate(angleToMouse + radians(90)); // Rotate the image towards the mouse and rotate it 90 radians so it's facing the right direction
+    //rotate(angleToMouse + radians(90)); // Rotate the image towards the mouse and rotate it 90 radians so it's facing the right direction
     image(runImages[runIndex], -halfW, -halfH); // Draw the player images
     //rect(-halfW, -halfH, w, h);
     popMatrix();

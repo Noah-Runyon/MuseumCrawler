@@ -19,9 +19,11 @@ static public class Keyboard {
   public static final int X = 88;
   public static final int C = 67;
   public static final int B = 66;
-  public static final int P = 80;
   public static final int K = 75;
   public static final int L = 76;
+  public static final int I = 73;
+  public static final int O = 79;
+  public static final int P = 80;
 
   public static void update() {
     // Update the state of all keys in the previous frame to the state in the current frame.

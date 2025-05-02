@@ -1,8 +1,13 @@
 // This is the Game Over Tab
 
 public class SceneGameOver {
+  
+  PImage gameover1Image;
 
   SceneGameOver() {
+    // Get the GameOver background image and size:
+    gameover1Image = loadImage("title_sprites/game_over_1.png");
+    gameover1Image.resize(width, height);
   }
 
   void update() {
@@ -16,6 +21,9 @@ public class SceneGameOver {
 
   void draw() {
     background(0);
+    
+    image(gameover1Image, 0, 0); // Set the background image and image position
+    
     fill(255);
     textSize(20);
     textAlign(CENTER, CENTER);

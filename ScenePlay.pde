@@ -749,8 +749,33 @@ public class ScenePlay {
       switchToGameOver();
     }
 
-    if (Keyboard.onDown(Keyboard.L)) {
+    // Activate SceneLevelUpMenu:
+    if (Keyboard.onDown(Keyboard.L) && sceneLevelUpMenu == null) {
       switchToLevelUpMenu();
+      println("Entering Level Up Menu");
+    }
+    // Deactivate SceneLevelUpMenu:
+    else if (Keyboard.onDown(Keyboard.L) && sceneLevelUpMenu != null) {
+      sceneLevelUpMenu = null;
+      println("Exiting Level Up Menu");
+    }
+
+    // LEVEL UP:
+    if (sceneLevelUpMenu != null) {
+      // Level HP:
+      if (Keyboard.onDown(Keyboard.I)) { // ExperienceSystem.currentExperience >= 2 // ExperienceSystem.level >= 2
+        println("Leveling HP");
+        player.maxHealth += 10; // Increase Max Health
+        player.currentHealth += 10; // Increase Current Health
+      }
+      // Level ATTACK:
+      if (Keyboard.onDown(Keyboard.O)) {
+        println("Leveling ATTACK");
+      }
+      // Level SPEED:
+      if (Keyboard.onDown(Keyboard.P)) {
+        println("Leveling SPEED");
+      }
     }
   }
 
@@ -832,6 +857,11 @@ public class ScenePlay {
     stroke(0);
     strokeWeight(1);
     rect(535, 660, player.barWidth, player.barHeight);
+
+    // Health bar text:
+    fill(255);
+    textSize(22);
+    text("HP: " + player.currentHealth + "/" + player.maxHealth, width/2, 670);
 
     // PREP FOR NEXT FRAME BLOCK
     Keyboard.update();
