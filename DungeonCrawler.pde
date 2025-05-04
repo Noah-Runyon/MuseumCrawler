@@ -1,7 +1,14 @@
-// This is the Main Tab
+// This is the Main Tab //<>//
 // DAGD 255 Dungeon Crawler Assignment
 // Ferris State University
 // Noah Runyon
+
+import processing.sound.*;
+SoundFile scenePlayMusic;
+SoundFile playerDamaged;
+SoundFile paintballFired;
+SoundFile enemyDefeated;
+SoundFile expCoinPickup;
 
 float dt; // Delta Time
 float prevTime = 0;
@@ -23,11 +30,19 @@ SceneInstructions sceneInstructions;
 ScenePlay scenePlay;
 SceneGameOver sceneGameOver;
 SceneLevelUpMenu sceneLevelUpMenu;
+SceneShopMenu sceneShopMenu;
+SceneMap sceneMap;
 
 float enemySpawnDelay = 1;
 
 void setup() {
   size(1280, 720); // 1000, 800 default
+
+  scenePlayMusic = new SoundFile(this, "data/music_tracks/duskRunner-main-theme.wav");
+  playerDamaged = new SoundFile(this, "data/sound_effects/aow.mp3");
+  paintballFired = new SoundFile(this, "data/sound_effects/swish_2.mp3");
+  enemyDefeated = new SoundFile(this, "data/sound_effects/explosion-1.mp3");
+  expCoinPickup = new SoundFile(this, "data/sound_effects/powerup-4.mp3");
 
   switchToTitle(); // Switch to ScenePlay at the start
 }
@@ -65,6 +80,17 @@ void draw() {
     if (sceneLevelUpMenu != null) sceneLevelUpMenu.draw();
   }
 
+  //Shop Menu:
+  if (sceneShopMenu != null) {
+    sceneShopMenu.update();
+    if (sceneShopMenu != null) sceneShopMenu.draw();
+  }
+
+  if (sceneMap != null) {
+    sceneMap.update();
+    if (sceneMap != null) sceneMap.draw();
+  }
+
   // Prep for next frame after this line:
 
   pLeftPressed = leftPressed;
@@ -96,6 +122,8 @@ void switchToTitle() {
   scenePlay = null;
   sceneGameOver = null;
   sceneLevelUpMenu = null;
+  sceneShopMenu = null;
+  sceneMap = null;
 }
 
 // Switch to Instructions:
@@ -105,6 +133,8 @@ void switchToInstructions() {
   scenePlay = null;
   sceneGameOver = null;
   sceneLevelUpMenu = null;
+  sceneShopMenu = null;
+  sceneMap = null;
 }
 
 // Switch to Play:
@@ -114,15 +144,22 @@ void switchToPlay() {
   scenePlay = new ScenePlay();
   sceneGameOver = null;
   sceneLevelUpMenu = null;
+  sceneShopMenu = null;
+  sceneMap = null;
+  scenePlayMusic.loop();
+  scenePlayMusic.amp(0.25);
 }
 
 // Switch to GameOver:
 void switchToGameOver() {
+  scenePlayMusic.stop();
   sceneTitle = null;
   sceneInstructions = null;
   scenePlay = null;
   sceneGameOver = new SceneGameOver();
   sceneLevelUpMenu = null;
+  sceneShopMenu = null;
+  sceneMap = null;
 }
 
 // Switch to Level Up:
@@ -132,6 +169,30 @@ void switchToLevelUpMenu() {
   //scenePlay = ScenePlay();
   sceneGameOver = null;
   sceneLevelUpMenu = new SceneLevelUpMenu();
+  sceneShopMenu = null;
+  sceneMap = null;
+}
+
+// Switch to Shop:
+void switchToShopMenu() {
+  sceneTitle = null;
+  sceneInstructions = null;
+  //scenePlay = ScenePlay();
+  sceneGameOver = null;
+  sceneLevelUpMenu = null;
+  sceneShopMenu = new SceneShopMenu();
+  sceneMap = null;
+}
+
+// Switch to Map:
+void switchToMap() {
+  sceneTitle = null;
+  sceneInstructions = null;
+  //scenePlay = ScenePlay();
+  sceneGameOver = null;
+  sceneLevelUpMenu = null;
+  sceneShopMenu = null;
+  sceneMap = new SceneMap();
 }
 
 // ZOOM effect:

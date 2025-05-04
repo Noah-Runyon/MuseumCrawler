@@ -2,7 +2,7 @@
 
 class Bullet extends AABB {
   
-  float lifeTime = 5; // How long the bullet lives for
+  float lifeTime = 0.35; // How long the bullet lives for
   float angleOfTravel; 
 
   Bullet(float x, float y, float angle) {
@@ -27,7 +27,8 @@ class Bullet extends AABB {
   }
 
   void draw() {
-    fill(#2493FF);
+    //fill(#2493FF);
+    fill(random(0, 255)); // Randomize paintball bullet color from white to black
     ellipse(x, y, w, h);
   }
 }

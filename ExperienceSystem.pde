@@ -3,7 +3,8 @@
 class ExperienceSystem { // This Tab caculates the experience
 
   int level = 1;
-  float currentExperience;
+  int levelUpSpendPoints = 0;
+  float currentExperience = 0;
   float maxExperience;
 
   float expPool;
@@ -34,6 +35,8 @@ class ExperienceSystem { // This Tab caculates the experience
     level++; // +1 Level
     maxExperience = (level + 1) * log10(level + 1) * 100; // Increase experience needed
     currentExperience = 0; // Set back to 0 // Adjust for carry-over experience?
+    levelUpSpendPoints += 1; // Increase level up spend points by 1
+    println("Spend Points: ", levelUpSpendPoints);
   }
 
   void update() {

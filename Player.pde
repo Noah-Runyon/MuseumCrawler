@@ -6,9 +6,9 @@ class Player extends AABB { // Class player extends AABB, because the player has
 
   int runCounter = 0; // Set runCounter to 0
   int runIndex = 0; // Set runIndex to 0
-  
+
   //PImage johnImage;
-  
+
   //int size;
 
   //float x, y; // DELETE THESE WHEN YOU EXTEND FROM AABB.
@@ -35,19 +35,35 @@ class Player extends AABB { // Class player extends AABB, because the player has
   float swingCooldown = 5; // Set swingCooldown to 5
   boolean canSwing = true; // Swet canSwing to true
 
+  float barWidth = 200, barHeight = 20;
+
+  // Level Up Stats {
   // Set the player's HP:
   float maxHealth = 100;
   float currentHealth = maxHealth;
   float mappedHealth;
-  float barWidth = 200, barHeight = 20;
+
+  // Set the player's damage:
+  float playerDamage = 10;
+
+  // Set the player's speed/velocity:
+  float playerSpeedX = velocity.x;
+  float playerSpeedY = velocity.y;
+  // }
 
   // Instantiate the player:
   Player(float xPos, float yPos) {
     x = xPos;
     y = yPos;
 
-    velocity.x = 1250; // Default 250
-    velocity.y = 1250; // Default 250
+    // Player Speed:
+    playerSpeedX = 1250;
+    playerSpeedY = 1250;
+    
+    velocity.x = playerSpeedX; // Default 250 // Player Speed
+    velocity.y = playerSpeedY; // Default 250 // Player Speed
+
+
     setSize(100, 100); // Set the player's size
 
     exp = new ExperienceSystem(); // Make take a String data for saves
@@ -93,10 +109,11 @@ class Player extends AABB { // Class player extends AABB, because the player has
     //  bullets.add(b);
     //}
 
-    // E Key for Bullets:
-    if (Keyboard.onDown(Keyboard.E)) { // Press the E key to fire a bullet
+    // Right Mouse Button for Bullets:
+    if (Mouse.onDown(Mouse.RIGHT)) { // Press the E key to fire a bullet
       Bullet b = new Bullet(x, y, angleToMouse);
       scenePlay.bullets.add(b);
+      paintballFired.play();
     }
 
     // X Key for EXP:
@@ -133,6 +150,7 @@ class Player extends AABB { // Class player extends AABB, because the player has
     if (Mouse.onDown(Mouse.LEFT) && canSwing == true && isSwinging == false) {
       MeleeSwing m = new MeleeSwing(x, y, angleToMouse);
       scenePlay.meleeSwings.add(m);
+      paintballFired.play();
     }
 
     // Dash:
@@ -148,8 +166,8 @@ class Player extends AABB { // Class player extends AABB, because the player has
     if (!isDashing) {
       //x += moveSpeed * moveDirection().x * dt;
       //y += moveSpeed * moveDirection().y * dt;
-      x += velocity.x * moveDirection().x * dt;
-      y += velocity.y * moveDirection().y * dt;
+      x += playerSpeedX * moveDirection().x * dt;
+      y += playerSpeedY * moveDirection().y * dt;
 
       runCounter++;
       if (runCounter >= 4) {
@@ -181,7 +199,7 @@ class Player extends AABB { // Class player extends AABB, because the player has
     //size = (radius * 2 >= 1) ? int(radius * 2) : 1; // If radius is less than 1, set it to 1
     //johnImage.resize(size, size);
     //image(johnImage, x-size/2, y-size/2);
-    
+
     fill(#26DE30);
     pushMatrix();
     translate(x, y);
@@ -248,8 +266,8 @@ class Player extends AABB { // Class player extends AABB, because the player has
 
   // Reset Velocity:
   void resetVelocity(float speed) { // Reset speed after dash
-    velocity.x = speed;
-    velocity.y = speed;
+    playerSpeedX = speed;
+    playerSpeedY = speed;
   }
 
   // Calculate the angle to the mouse:

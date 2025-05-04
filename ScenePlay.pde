@@ -4,6 +4,7 @@ public class ScenePlay {
 
   Camera camera;
   Player player;
+  ExperienceSystem exs;
   float prevGameTime = 0;
   float elapsedGameTime = 0;
 
@@ -23,13 +24,26 @@ public class ScenePlay {
   ArrayList<Coins> coins = new ArrayList();
   ArrayList<TileBG> tiles = new ArrayList();
   ArrayList<Wall> walls = new ArrayList();
+  ArrayList<Particle> particles = new ArrayList();
 
   // Enemies:
   ArrayList<Enemy> enemy = new ArrayList();
 
+  PImage sarahImage; // Sarah Image
+  PImage carImage;
+
   ScenePlay() {
     player = new Player(width/2, height/2);
     camera = new Camera(player);
+    exs = new ExperienceSystem();
+
+    // Sarah Image:
+    sarahImage = loadImage("shop_sprites/sarah_sprite_1.png"); // Set Sarah image
+    sarahImage.resize(100, 100); // Sarah image size
+
+    // Ford Model A (car) Image:
+    carImage = loadImage("other_sprites/ford_model_a.png"); // Set Car image
+    carImage.resize(400, 400); // Car image size
 
     //for(int i = 0; i < 5; i++) {
     //   for(int j = 0; j < 5, j++) {
@@ -606,6 +620,7 @@ public class ScenePlay {
         player.applyFix(player.findOverlapFix(w));
       }
 
+      // Check for overlap with enemy
       //if (w.checkOverlap(enemy)) {
       //  enemy.applyFix(enemy.findOverlapFix(w));
       //}
@@ -628,22 +643,32 @@ public class ScenePlay {
       // Check enemy overlap with the player:
       if (e.checkOverlap(player)) { // Check if overlapping with the player
         player.applyFix(player.findOverlapFix(e)); // Set collision
-        player.currentHealth -= 0; // Set it so the player takes damage
+        //player.currentHealth -= 1; // Set it so the player takes damage
+        //playerDamaged.play();
+      }
+
+      // Check enemy overlap with the walls:
+      for (int w = 0; w < walls.size(); w++) {
+        Wall wall = walls.get(w);
+        if (e.checkOverlap(wall)) { // Check if overlapping with the player
+          e.applyFix(e.findOverlapFix(wall)); // Set collision
+        }
       }
 
       // Check Enemy collision with Walls:
-      for (int j = 0; j < walls.size(); j++) {
-        Wall w = walls.get(j);
+      //for (int j = 0; j < walls.size(); j++) {
+      //  Wall w = walls.get(j);
 
-        if (w.checkOverlap(e)) { // Check overlap with bullets and enemies
-          //e.currentHealth -= 20; // Remove enemy HP
-          e.isDead = true; // Set bullets to be dead
-          //player.applyFix(player.findOverlapFix(e));
-          //if (w.checkOverlap(player)) {
-          //  player.applyFix(player.findOverlapFix(w));
-          //}
-        }
-      }
+      //  if (w.checkOverlap(e)) { // Check overlap with bullets and enemies
+      //    //e.currentHealth -= 20; // Remove enemy HP
+      //    //e.isDead = true; // Set bullets to be dead
+      //    //enemy.applyFix(enemy.findOverlapFix(w));
+      //    //player.applyFix(player.findOverlapFix(e));
+      //    //if (w.checkOverlap(player)) {
+      //    //  player.applyFix(player.findOverlapFix(w));
+      //    //}
+      //  }
+      //}
 
 
       if (e.isDead) enemies.remove(e); // Remove dead enemies
@@ -657,6 +682,7 @@ public class ScenePlay {
       if (e.checkOverlap(player)) { // Check if overlapping with the player
         player.exp.expPool += e.expAmount;
         e.isDead = true; // If overlapping with the player, set isDead to true
+        expCoinPickup.play();
       }
 
       if (e.isDead) expPoints.remove(e); // Remove dead EXP points
@@ -670,6 +696,7 @@ public class ScenePlay {
       if (c.checkOverlap(player)) { // Check if overlapping with the player
         player.coin.coinsPool += c.coinsAmount;
         c.isDead = true; // If overlapping with the player, set isDead to true
+        expCoinPickup.play();
       }
 
       if (c.isDead) coins.remove(c); // Remove dead coins
@@ -685,7 +712,7 @@ public class ScenePlay {
         Enemy e = enemies.get(j);
 
         if (e.checkOverlap(b)) { // Check overlap with bullets and enemies
-          e.currentHealth -= 20; // Remove enemy HP
+          e.currentHealth -= player.playerDamage; // Remove enemy HP // Default 20
           b.isDead = true; // Set bullets to be dead
         }
       }
@@ -711,7 +738,7 @@ public class ScenePlay {
         Enemy e = enemies.get(j);
 
         if (e.checkOverlap(m)) {
-          e.currentHealth -= 20;
+          e.currentHealth -= player.playerDamage; // Default 20
           m.isDead = true;
         }
       }
@@ -726,20 +753,27 @@ public class ScenePlay {
         if (random == 1) {
           Enemy e = new Enemy1();
           enemies.add(e);
-          println("Enemy1");
+          //println("Enemy1");
         }
         if (random == 2) {
           Enemy e = new Enemy2();
           enemies.add(e);
-          println("Enemy2");
+          //println("Enemy2");
         }
         if (random == 3) {
           Enemy e = new Enemy3();
           enemies.add(e);
-          println("Enemy3");
+          //println("Enemy3");
         }
-        enemySpawnDelay = (int)random(4, 5);
+        enemySpawnDelay = (int)random(1, 2); // Default: 4, 5
       }
+    }
+
+    // PARTICLES:
+    for (int i = 0; i < particles.size(); i++) {
+      Particle p = particles.get(i);
+      p.update(dt);
+      if (p.isDead) particles.remove(p);
     }
 
     player.update(); // Update the player
@@ -760,21 +794,80 @@ public class ScenePlay {
       println("Exiting Level Up Menu");
     }
 
+    // Activate SceneShopMenu:
+    if (Keyboard.onDown(Keyboard.H) && sceneShopMenu == null) {
+      switchToShopMenu();
+      println("Entering Level Up Menu");
+    }
+    // Deactivate SceneShopMenu:
+    else if (Keyboard.onDown(Keyboard.H) && sceneShopMenu != null) {
+      sceneShopMenu = null;
+      println("Exiting Level Up Menu");
+    }
+
+    // Activate SceneMap:
+    if (Keyboard.onDown(Keyboard.M) && sceneMap == null) {
+      switchToMap();
+      println("Entering Map Menu");
+    }
+    // Deactivate SceneMap:
+    else if (Keyboard.onDown(Keyboard.M) && sceneMap != null) {
+      sceneMap = null;
+      println("Exiting Map Menu");
+    }
+
     // LEVEL UP:
     if (sceneLevelUpMenu != null) {
       // Level HP:
-      if (Keyboard.onDown(Keyboard.I)) { // ExperienceSystem.currentExperience >= 2 // ExperienceSystem.level >= 2
+      //println("In-Menu Points: ", exs.levelUpSpendPoints, player.exp.levelUpSpendPoints); // Use the player.exp one
+      if (Keyboard.onDown(Keyboard.I) && player.exp.levelUpSpendPoints >= 1) { // ExperienceSystem.currentExperience >= 2 // ExperienceSystem.level >= 2 // && ExperienceSystem.levelUpSpendPoints >= 1
         println("Leveling HP");
         player.maxHealth += 10; // Increase Max Health
         player.currentHealth += 10; // Increase Current Health
+        player.exp.levelUpSpendPoints -= 1; // Decrease levelUpSpendPoints by 1
       }
       // Level ATTACK:
-      if (Keyboard.onDown(Keyboard.O)) {
+      if (Keyboard.onDown(Keyboard.O) && player.exp.levelUpSpendPoints >= 1) {
         println("Leveling ATTACK");
+        player.playerDamage += 5; // Increase Player Damage
+        player.exp.levelUpSpendPoints -= 1; // Decrease levelUpSpendPoints by 1
       }
       // Level SPEED:
-      if (Keyboard.onDown(Keyboard.P)) {
+      if (Keyboard.onDown(Keyboard.P) && player.exp.levelUpSpendPoints >= 1) {
         println("Leveling SPEED");
+        player.playerSpeedX += 10; // Increase Player X Speed
+        player.playerSpeedY += 10; // Increase Player Y Speed
+        player.exp.levelUpSpendPoints -= 1; // Decrease levelUpSpendPoints by 1
+      }
+    }
+
+    // SHOP:
+    if (sceneShopMenu != null) {
+      // Buy Water:
+      //println("In-Menu Coins: ", player.coin.currentCoins); // Use the player.exp one
+      if (Keyboard.onDown(Keyboard.I) && player.coin.currentCoins >= 20) { // ExperienceSystem.currentExperience >= 2 // ExperienceSystem.level >= 2 // && ExperienceSystem.levelUpSpendPoints >= 1
+        println("Buying Water");
+        player.exp.currentExperience += 20; // Increase the player's current EXP
+        player.coin.currentCoins -= 20; // Decrease levelUpSpendPoints by 1
+      }
+      // Buy Energy Drink:
+      if (Keyboard.onDown(Keyboard.O) && player.coin.currentCoins >= 20) {
+        println("Buying Energy Drink");
+
+        player.coin.currentCoins -= 20; // Decrease levelUpSpendPoints by 1
+      }
+      // Buy Trail Mix:
+      if (Keyboard.onDown(Keyboard.P) && player.coin.currentCoins >= 20) {
+        println("Buying Trail Mix");
+        // Increase the player's current HP:
+        if (player.currentHealth < player.maxHealth) {
+          player.currentHealth += 20;
+        }
+        // Cap the player's HP:
+        if (player.currentHealth > player.maxHealth) {
+          player.currentHealth = player.maxHealth;
+        }
+        player.coin.currentCoins -= 20; // Decrease levelUpSpendPoints by 1
       }
     }
   }
@@ -789,6 +882,67 @@ public class ScenePlay {
     translate(-width/2 - camera.x, -height/2 - camera.y);
 
     // DRAW BLOCK
+
+    // Floors:
+    // South Wing:
+    fill(210);
+    rect(-1250, -750, 3750, 1250); // X Pos, Y Pos, X Size, Y Size
+
+    // West Wing:
+    fill(240);
+    rect(-2500, -5750, 1250, 6250);
+
+    // 0,4 Lower-Left West
+    rect(-3750, -2000, 1250, 1250);
+
+    // 0,2 Upper-Left West
+    rect(-3750, -4500, 1250, 1250);
+
+    // East Wing:
+    fill(#a58366); // Brown
+    rect(2500, -5750, 1250, 6250);
+
+    // 6,2 Upper-Right East
+    rect(3750, -4500, 1250, 1250);
+
+    // 6,4 Lower-Right East
+    rect(3750, -2000, 1250, 1250);
+
+    // North Wing:
+    fill(150);
+    rect(-1250, -5750, 3750, 1250); // X Pos, Y Pos, X Size, Y Size
+
+    // 3,0 Upper-Middle North
+    rect(0, -7000, 1250, 1250);
+
+    // Courtyard:
+    fill(0, 100, 0);
+    rect(-1250, -4500, 3800, 3800);
+
+    // Road Base:
+    fill(155);
+    rect(-3750, 500, 8750, 1250);
+
+    // Road Line 1:
+    fill(#dee11f); // Yellow
+    rect(-3750, 1075, 8750, 25);
+
+    // Road Line 2:
+    rect(-3750, 1125, 8750, 25);
+
+    // Shop rug:
+    fill(200, 0, 0);
+    rect(335, -425, 228, 237);
+
+    // Shop rug inner:
+    fill(240);
+    rect(355, -405, 188, 197);
+
+    // Sarah Image:
+    image(sarahImage, 400, -415); // Sarah image position
+
+    // Car Image:
+    image(carImage, 500, 500); // Car image position
 
     // Draw Walls:
     for (int i = walls.size() - 1; i >= 0; i--) {
@@ -829,6 +983,12 @@ public class ScenePlay {
     for (int i = 0; i < enemy.size(); i++) {
       Enemy e = enemy.get(i);
       e.draw();
+    }
+
+    // DRAW the Particles:
+    for (int i = 0; i < particles.size(); i++) {
+      Particle p = particles.get(i);
+      p.draw();
     }
 
     player.draw(); // Draw the player

@@ -14,7 +14,7 @@ class Enemy extends AABB {
 
   boolean isDead = false; // Set isDead to false
 
-  float maxHealth = 50; // Set Max HP
+  float maxHealth = random(40, 60); // Set Max HP
   float currentHealth = maxHealth; // Set current HP
 
   float mappedHealth;
@@ -32,6 +32,11 @@ class Enemy extends AABB {
   // Set up an arary
   //ArrayList<PVector> spawnLocations = new ArrayList<PVector>();
   ArrayList<PVector> spawnLocations = new ArrayList<PVector>();
+
+  public int IDLE_STATE = 1;
+  public int CHASING_STATE = 2;
+  public int ATTACKING_STATE = 3;
+  private int currentState = 1;
 
   // Room 0,2
   float zeroTwoRoomX = random(-3750, -2500); // Default: (-3750, -2500);
@@ -120,7 +125,7 @@ class Enemy extends AABB {
     spawnLocation = spawnLocations.get(rand); // Randomize spawn location
     x = spawnLocation.x; // Set X
     y = spawnLocation.y; // Set Y
-    println(spawnLocation); // Print Coordinates
+    //println(spawnLocation); // Print Coordinates
 
     //// West Wing:
     //spawnLocations.add(westWingVector);
@@ -159,9 +164,31 @@ class Enemy extends AABB {
     // Make speed direction towards player
     // If player is within 500 pixels of enemy()
     // if (scenePlay.player.x <= 500 && scenePlay.player.y <= 500) {
-    if (distanceToPlayer <= 500) { // It's less than 0, is not less than -1, and is not equal to -1, 0, or 1
+    if (distanceToPlayer <= 700) { // It's less than 0, is not less than -1, and is not equal to -1, 0, or 1
+      currentState = CHASING_STATE;
+      if (distanceToPlayer <= 200) {
+        currentState = ATTACKING_STATE;
+      }
+    }
+
+    if (distanceToPlayer >= 500) {
+      currentState = IDLE_STATE;
+    }
+
+    // IDLE State:
+    if (currentState == IDLE_STATE) {
+    }
+
+    // CHASING State:
+    if (currentState == CHASING_STATE) {
       x += speedX * cos(angleToPlayer) * dt; // Make X towards player
       y += speedX * sin(angleToPlayer) * dt; // Make Y towards player
+    }
+
+    // ATTACKING State:
+    if (currentState == ATTACKING_STATE) {
+      scenePlay.player.currentHealth -= 1; // Reduce Player HP
+      playerDamaged.play(); // Player damage noise on collision
     }
 
     barX = x - 52;
@@ -172,9 +199,11 @@ class Enemy extends AABB {
     if (currentHealth <= 0) {
       isDead = true;
       //player.exp.expPool += expAmount;
+      
+      enemyDefeated.play();
 
       // EXP Amount
-      int numExp = (int)random(2, 5);
+      int numExp = (int)random(2, 5) * scenePlay.exs.level;
       float chunkExp = ceil(expAmount / numExp);
       for (int i = 0; i < numExp; i++) {
         ExpPoint e = new ExpPoint(x, y, chunkExp);
@@ -182,11 +211,24 @@ class Enemy extends AABB {
       }
 
       // Coins Amount
-      int numCoins = (int)random(2, 5);
+      int numCoins = (int)random(2, 5) * scenePlay.exs.level;
       float chunkCoins = ceil(coinsAmount / numCoins);
       for (int i = 0; i < numCoins; i++) {
         Coins c = new Coins(x, y, chunkCoins);
         scenePlay.coins.add(c);
+      }
+      
+      Particle r = new Particle(x, y);
+      // Particle Type: p.particleType = 1;
+      scenePlay.particles.add(r);
+      
+      int numParticles = (int)random(20, 40); // Amount of particles
+      for(int i = 0; i < numParticles; i++) {
+       Particle p = new Particle(x, y);
+       p.velocity.x = random(-200, 200); // Particle speed in the X
+       p.velocity.y = random(-200, 200); // Particle speed in the Y
+       // p.particleType = 1;
+       scenePlay.particles.add(p);
       }
     }
   }
@@ -223,5 +265,26 @@ class Enemy extends AABB {
     float dy = scenePlay.player.y - y;
     //distanceToPlayer = atan2(dy, dx);
     distanceToPlayer = sqrt((dx * dx) + (dy * dy));
+  }
+
+  void applyFix(PVector fix) {
+    x += fix.x;
+    y += fix.y;
+    if (fix.x != 0) {
+      // If we move the Enemy left or right, the Enemy must have hit a wall, so we set horizontal velocity to zero.
+      //velocity.x = 0;
+    }
+    if (fix.y != 0) {
+      // If we move the Enemy up or down, the Enemy must have hit a floor or ceiling, so we set vertical velocity to zero.
+      //velocity.y = 0;
+      if (fix.y < 0) {
+        // If we move the Enemy up, we must have hit a floor.
+      }
+      if (fix.y > 0) {
+        // If we move the Enemy down, we must have hit our head on a ceiling.
+      }
+    }
+    // recalculate AABB (since we moved the object AND we might have other collisions to fix yet this frame):
+    calcEdges();
   }
 }
