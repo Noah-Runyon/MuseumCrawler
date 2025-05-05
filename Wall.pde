@@ -6,18 +6,12 @@ public class Wall extends AABB {
     setSize(W, H);
   }
 
-  //@Override public void update(float dt) {
-  //super.update(dt);
-  //}
-
   void update() {
-    // Nothing
   }
 
   void draw() {
     fill(100, 100, 100); // Wall color
-    
+
     rect(x-halfW, y-halfH, halfW*2, halfH*2); // First two are position, second two are size
-    //rect(500, 500, 100, 100);
   }
 }

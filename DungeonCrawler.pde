@@ -1,7 +1,11 @@
-// This is the Main Tab //<>//
+// This is the Main Tab
 // DAGD 255 Dungeon Crawler Assignment
 // Ferris State University
 // Noah Runyon
+// Finished 5/4/25
+
+// Music by me, from my game Dusk Runner
+// This game is called Museum Crawler, and is called Dungeon Crawler in the game files
 
 import processing.sound.*;
 SoundFile scenePlayMusic;
@@ -40,9 +44,9 @@ void setup() {
 
   scenePlayMusic = new SoundFile(this, "data/music_tracks/duskRunner-main-theme.wav");
   playerDamaged = new SoundFile(this, "data/sound_effects/aow.mp3");
-  paintballFired = new SoundFile(this, "data/sound_effects/swish_2.mp3");
-  enemyDefeated = new SoundFile(this, "data/sound_effects/explosion-1.mp3");
-  expCoinPickup = new SoundFile(this, "data/sound_effects/powerup-4.mp3");
+  paintballFired = new SoundFile(this, "data/sound_effects/swish.mp3");
+  enemyDefeated = new SoundFile(this, "data/sound_effects/explosion.mp3");
+  expCoinPickup = new SoundFile(this, "data/sound_effects/powerup.mp3");
 
   switchToTitle(); // Switch to ScenePlay at the start
 }
@@ -199,8 +203,6 @@ void switchToMap() {
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
   zoomValue += e * -0.1; // How much the camera zooms by
-  //if (zoomValue >= 2) zoomValue = 2; // Max zoom out
-  //if (zoomValue <= 0.5) zoomValue = 0.5; // Min zoom in
   zoomValue = constrain(zoomValue, 0.5, 2);
 }
 

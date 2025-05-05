@@ -7,14 +7,11 @@ class Player extends AABB { // Class player extends AABB, because the player has
   int runCounter = 0; // Set runCounter to 0
   int runIndex = 0; // Set runIndex to 0
 
-  //PImage johnImage;
+  PImage johnImage;
 
-  //int size;
+  int size = 96;
 
-  //float x, y; // DELETE THESE WHEN YOU EXTEND FROM AABB.
   float w = 100, h = 100; // DELETE THESE WHEN YOU EXTEND FROM AABB.
-
-  //float moveSpeed = 250;
 
   ExperienceSystem exp;
 
@@ -29,6 +26,7 @@ class Player extends AABB { // Class player extends AABB, because the player has
   float dashTimer = 0.2; // How long the dash lasts for
   float dashCooldown = 1.5; // How long the dash cooldown is
   boolean canDash = true; // Set canDash to true
+  float dashDistance = 1500;
 
   boolean isSwinging = false; // Set isSwinging to false
   float swingTimer = 5; // Set swingTimer to 5
@@ -39,7 +37,7 @@ class Player extends AABB { // Class player extends AABB, because the player has
 
   // Level Up Stats {
   // Set the player's HP:
-  float maxHealth = 100;
+  float maxHealth = 150;
   float currentHealth = maxHealth;
   float mappedHealth;
 
@@ -57,9 +55,9 @@ class Player extends AABB { // Class player extends AABB, because the player has
     y = yPos;
 
     // Player Speed:
-    playerSpeedX = 1250;
-    playerSpeedY = 1250;
-    
+    playerSpeedX = 500;
+    playerSpeedY = 500;
+
     velocity.x = playerSpeedX; // Default 250 // Player Speed
     velocity.y = playerSpeedY; // Default 250 // Player Speed
 
@@ -70,10 +68,10 @@ class Player extends AABB { // Class player extends AABB, because the player has
 
     coin = new CoinsSystem(); // Make take a String data for saves
 
-    for (int i = 0; i < runImages.length; i++) {
-      runImages[i] = loadImage("player_sprites/john_armed_" + (i+1) + ".png"); // Load the images in a cycle
-      runImages[i].resize(75 + (width * 1/35), 75 + (height * 1/35)); // Resize the player imagess to a proper size
-    }
+    //for (int i = 0; i < runImages.length; i++) {
+    //  runImages[i] = loadImage("player_sprites/john_armed_" + (i+1) + ".png"); // Load the images in a cycle
+    //  runImages[i].resize(75 + (width * 1/35), 75 + (height * 1/35)); // Resize the player imagess to a proper size
+    //}
   }
 
   void update() {
@@ -104,11 +102,6 @@ class Player extends AABB { // Class player extends AABB, because the player has
       }
     }
 
-    //if (Mouse.onDown(Mouse.LEFT)) {
-    //  Bullet b = new Bullet(x, y, angleToMouse);
-    //  bullets.add(b);
-    //}
-
     // Right Mouse Button for Bullets:
     if (Mouse.onDown(Mouse.RIGHT)) { // Press the E key to fire a bullet
       Bullet b = new Bullet(x, y, angleToMouse);
@@ -116,17 +109,15 @@ class Player extends AABB { // Class player extends AABB, because the player has
       paintballFired.play();
     }
 
-    // X Key for EXP:
-    if (Keyboard.onDown(Keyboard.X)) { // Press the Q key to get experience // Do a Modulo thing to get it to carry over leftover experience???
-      //exp.levelUp();
-      //exp.currentExperience += 20;
-      exp.expPool += 20; // Give the player 20XP
-    }
+    //// X Key for EXP:
+    //if (Keyboard.onDown(Keyboard.X)) { // Press the Q key to get experience // Do a Modulo thing to get it to carry over leftover experience???
+    //  exp.expPool += 20; // Give the player 20XP
+    //}
 
-    // C Key for Coins:
-    if (Keyboard.onDown(Keyboard.C)) { // Press the C key to get coins
-      coin.coinsPool += 20; // Give the player coins
-    }
+    //// C Key for Coins:
+    //if (Keyboard.onDown(Keyboard.C)) { // Press the C key to get coins
+    //  coin.coinsPool += 20; // Give the player coins
+    //}
 
     // If the player is swinging:
     if (isSwinging) {
@@ -158,14 +149,12 @@ class Player extends AABB { // Class player extends AABB, because the player has
       if (canDash && !isDashing) {
         isDashing = true;
         canDash = false;
-        dash(1500, moveDirection());
+        dash(dashDistance, moveDirection());
       }
     }
 
     // If dashing:
     if (!isDashing) {
-      //x += moveSpeed * moveDirection().x * dt;
-      //y += moveSpeed * moveDirection().y * dt;
       x += playerSpeedX * moveDirection().x * dt;
       y += playerSpeedY * moveDirection().y * dt;
 
@@ -187,46 +176,21 @@ class Player extends AABB { // Class player extends AABB, because the player has
     }
   }
 
-  //if (Keyboard.onDown(Keyboard.Q)) { // Press the Q key to get experience // Do a Modulo thing to get it to carry over leftover experience???
-  //  //exp.levelUp();
-  //  //exp.currentExperience += 20;
-  //  exp.expPool += 20; // Give the player 20XP
-  //}
-
   void draw() {
     // Draw the player:
-    //johnImage = loadImage("player_sprites/john_1.png");
+    johnImage = loadImage("player_sprites/johnImage.png");
     //size = (radius * 2 >= 1) ? int(radius * 2) : 1; // If radius is less than 1, set it to 1
-    //johnImage.resize(size, size);
-    //image(johnImage, x-size/2, y-size/2);
+    johnImage.resize(size, size);
+    image(johnImage, x-size/2, y-size/2);
 
     fill(#26DE30);
     pushMatrix();
     translate(x, y);
     //rotate(angleToMouse); // Rotate the image towards the mouse
     //rotate(angleToMouse + radians(90)); // Rotate the image towards the mouse and rotate it 90 radians so it's facing the right direction
-    image(runImages[runIndex], -halfW, -halfH); // Draw the player images
+    //image(runImages[runIndex], -halfW, -halfH); // Draw the player images
     //rect(-halfW, -halfH, w, h);
     popMatrix();
-
-    //pushMatrix();
-    //translate(x, y);
-    //// Draw the animated health bar:
-    //textSize(20); // Set the text size
-    //textAlign(CENTER, CENTER); // Set the text alignment
-    ////text("HP", width/2, height/2);
-    //fill(0, 102, 0); // Green color
-    //noStroke();
-    //rect(-100, height - 650, mappedHealth, barHeight);
-
-    //// Health bar boarder:
-    //noFill();
-    //stroke(0);
-    //strokeWeight(1);
-    //rect(-100, height - 650, barWidth, barHeight);
-    //popMatrix();
-
-    //exp.draw();
   }
 
   // Move Direction:
@@ -255,13 +219,9 @@ class Player extends AABB { // Class player extends AABB, because the player has
   // Dash:
   void dash(float dashSpeed, PVector moveDirection) { // Dash
     PVector direction = moveDirection.copy();
-    //println(direction);
     acceleration = direction.mult(dashSpeed);
-    //acceleration = new PVector(dashSpeed, dashSpeed); // Set the dash speed
     dashVelocity.x = acceleration.x;
     dashVelocity.y = acceleration.y;
-    //dashVelocity.x = acceleration.x * dt;
-    //dashVelocity.y = acceleration.y * dt;
   }
 
   // Reset Velocity:
@@ -282,11 +242,9 @@ class Player extends AABB { // Class player extends AABB, because the player has
     y += fix.y;
     if (fix.x != 0) {
       // If we move the player left or right, the player must have hit a wall, so we set horizontal velocity to zero.
-      //velocity.x = 0;
     }
     if (fix.y != 0) {
       // If we move the player up or down, the player must have hit a floor or ceiling, so we set vertical velocity to zero.
-      //velocity.y = 0;
       if (fix.y < 0) {
         // If we move the player up, we must have hit a floor.
       }

@@ -1,5 +1,5 @@
 // This is the Camera Tab
-// Rylynn showed me hot to get the camera zoom working properly
+// Rylynn showed me how to get the camera zoom working properly
 
 class Camera {
 

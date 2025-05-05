@@ -45,13 +45,6 @@ public class ScenePlay {
     carImage = loadImage("other_sprites/ford_model_a.png"); // Set Car image
     carImage.resize(400, 400); // Car image size
 
-    //for(int i = 0; i < 5; i++) {
-    //   for(int j = 0; j < 5, j++) {
-    //    TileBG tile = new TileBG(j * bgWidth, i * bgHeight);
-    //    tiles.add(tile);
-    //   }
-    //}
-
     // Add STARTING enemies:
     if (starterEnemies == true) {
       for (int i = 0; i < 10; i++) {
@@ -77,22 +70,10 @@ public class ScenePlay {
 
     camera.update(); // Update the camera
 
-    //for(int i = 0; i < tiles.size9); i++) {
-    // tiles.get(i).draw();
-    //}
-
     if (wallsMade == false) { // Make it so the walls are only made once
 
-      //makeWall(200, 200, 100, 100); // Position X, Position Y, Width, Height
-
       // WALLS {
-      //float wallGroup = (random(0, 0));
       float wallGroup = 1;
-
-      //makeWall(440, -300, 240, 25); // Position X, Position Y, Width, Height
-
-      //float yPosGroup1 = random(595, height - 595); // Original
-      //float yPosGroup1;
 
       // 1,5
       if (wallGroup <= 1) {
@@ -146,14 +127,15 @@ public class ScenePlay {
         float wallGroup1Scale2 = 50; // Wall Thickness
         float wallGroup1Scale3 = 1225; // X
         float wallGroupFullWallScaleMultiplier = 2.5; // wallGroupFullWallScaleMultiplier // 2.5 position and multiply for center full wall
-        //float xPosition = 1;
-        //float yPosition = 1;
-        //makeWall(width + 150, yPos, random(200, 200), 50); // Default: makeWall(width + 150, yPos, random(200, 300), 50);
-        //makeWall(0, 0, 200, 50); // X, Y, width, height
+        
         //makeWall(440, -300, 240, 25); // Position X, Position Y, Width, Height
         // Top Left:
         makeWall(wallGroup1Scale1/2 + wallGroup1X, wallGroup1Scale2/2 + wallGroup1Y, wallGroup1Scale1, wallGroup1Scale2); // Top-Left Horizontal
         makeWall(wallGroup1Scale2/2 + wallGroup1X, wallGroup1Scale1/2 + wallGroup1Y, wallGroup1Scale2, wallGroup1Scale1); // Top-Left Vertical
+        
+        // Top Middle Door:
+        makeWall(wallGroup1Scale1/2 + wallGroup1X + 250, wallGroup1Scale2/2 + wallGroup1Y, wallGroup1Scale1, wallGroup1Scale2); // Top-Left Horizontal
+        
         // Top Right:
         makeWall(wallGroup1Scale1*2  + wallGroup1X, wallGroup1Scale2/2 + wallGroup1Y, wallGroup1Scale1, wallGroup1Scale2); // Top-Right Horizontal
         makeWall(wallGroup1Scale3 + wallGroup1X, wallGroup1Scale1/2 + wallGroup1Y, wallGroup1Scale2, wallGroup1Scale1); // Top-Right Vertical
@@ -619,19 +601,6 @@ public class ScenePlay {
       if (w.checkOverlap(player)) {
         player.applyFix(player.findOverlapFix(w));
       }
-
-      // Check for overlap with enemy
-      //if (w.checkOverlap(enemy)) {
-      //  enemy.applyFix(enemy.findOverlapFix(w));
-      //}
-
-      //for (int j = 0; j < enemies.size(); j++) {
-      //  Enemy e = enemies.get(j);
-      //  w.update();
-      //  if (w.checkOverlap(enemy)) {
-      //    enemy.applyFix(enemy.findOverlapFix(w));
-      //  }
-      //}
     }
     // } End Walls
 
@@ -643,8 +612,6 @@ public class ScenePlay {
       // Check enemy overlap with the player:
       if (e.checkOverlap(player)) { // Check if overlapping with the player
         player.applyFix(player.findOverlapFix(e)); // Set collision
-        //player.currentHealth -= 1; // Set it so the player takes damage
-        //playerDamaged.play();
       }
 
       // Check enemy overlap with the walls:
@@ -654,22 +621,6 @@ public class ScenePlay {
           e.applyFix(e.findOverlapFix(wall)); // Set collision
         }
       }
-
-      // Check Enemy collision with Walls:
-      //for (int j = 0; j < walls.size(); j++) {
-      //  Wall w = walls.get(j);
-
-      //  if (w.checkOverlap(e)) { // Check overlap with bullets and enemies
-      //    //e.currentHealth -= 20; // Remove enemy HP
-      //    //e.isDead = true; // Set bullets to be dead
-      //    //enemy.applyFix(enemy.findOverlapFix(w));
-      //    //player.applyFix(player.findOverlapFix(e));
-      //    //if (w.checkOverlap(player)) {
-      //    //  player.applyFix(player.findOverlapFix(w));
-      //    //}
-      //  }
-      //}
-
 
       if (e.isDead) enemies.remove(e); // Remove dead enemies
     }
@@ -722,7 +673,6 @@ public class ScenePlay {
         Wall w = walls.get(j);
 
         if (w.checkOverlap(b)) { // Check overlap with bullets and enemies
-          //e.currentHealth -= 20; // Remove enemy HP
           b.isDead = true; // Set bullets to be dead
         }
       }
@@ -778,10 +728,10 @@ public class ScenePlay {
 
     player.update(); // Update the player
 
-    // QUIT the Game
-    if (Keyboard.onDown(Keyboard.K)) {
-      switchToGameOver();
-    }
+    //// QUIT the Game
+    //if (Keyboard.onDown(Keyboard.K)) {
+    //  switchToGameOver();
+    //}
 
     // Activate SceneLevelUpMenu:
     if (Keyboard.onDown(Keyboard.L) && sceneLevelUpMenu == null) {
@@ -793,9 +743,9 @@ public class ScenePlay {
       sceneLevelUpMenu = null;
       println("Exiting Level Up Menu");
     }
-
+    
     // Activate SceneShopMenu:
-    if (Keyboard.onDown(Keyboard.H) && sceneShopMenu == null) {
+    if (Keyboard.onDown(Keyboard.H) && sceneShopMenu == null && player.x >= 312.5 && player.x <= 934 && player.y >= -437.5 && player.y <= 175) {
       switchToShopMenu();
       println("Entering Level Up Menu");
     }
@@ -822,21 +772,21 @@ public class ScenePlay {
       //println("In-Menu Points: ", exs.levelUpSpendPoints, player.exp.levelUpSpendPoints); // Use the player.exp one
       if (Keyboard.onDown(Keyboard.I) && player.exp.levelUpSpendPoints >= 1) { // ExperienceSystem.currentExperience >= 2 // ExperienceSystem.level >= 2 // && ExperienceSystem.levelUpSpendPoints >= 1
         println("Leveling HP");
-        player.maxHealth += 10; // Increase Max Health
-        player.currentHealth += 10; // Increase Current Health
+        player.maxHealth += 50; // Increase Max Health
+        player.currentHealth += 50; // Increase Current Health
         player.exp.levelUpSpendPoints -= 1; // Decrease levelUpSpendPoints by 1
       }
       // Level ATTACK:
       if (Keyboard.onDown(Keyboard.O) && player.exp.levelUpSpendPoints >= 1) {
         println("Leveling ATTACK");
-        player.playerDamage += 5; // Increase Player Damage
+        player.playerDamage += 10; // Increase Player Damage
         player.exp.levelUpSpendPoints -= 1; // Decrease levelUpSpendPoints by 1
       }
       // Level SPEED:
       if (Keyboard.onDown(Keyboard.P) && player.exp.levelUpSpendPoints >= 1) {
         println("Leveling SPEED");
-        player.playerSpeedX += 10; // Increase Player X Speed
-        player.playerSpeedY += 10; // Increase Player Y Speed
+        player.playerSpeedX += 100; // Increase Player X Speed
+        player.playerSpeedY += 100; // Increase Player Y Speed
         player.exp.levelUpSpendPoints -= 1; // Decrease levelUpSpendPoints by 1
       }
     }
@@ -851,10 +801,10 @@ public class ScenePlay {
         player.coin.currentCoins -= 20; // Decrease levelUpSpendPoints by 1
       }
       // Buy Energy Drink:
-      if (Keyboard.onDown(Keyboard.O) && player.coin.currentCoins >= 20) {
+      if (Keyboard.onDown(Keyboard.O) && player.coin.currentCoins >= 100) {
         println("Buying Energy Drink");
-
-        player.coin.currentCoins -= 20; // Decrease levelUpSpendPoints by 1
+        player.dashDistance += 250; // Increase player dash distance
+        player.coin.currentCoins -= 100; // Decrease levelUpSpendPoints by 1
       }
       // Buy Trail Mix:
       if (Keyboard.onDown(Keyboard.P) && player.coin.currentCoins >= 20) {
@@ -929,6 +879,10 @@ public class ScenePlay {
 
     // Road Line 2:
     rect(-3750, 1125, 8750, 25);
+    
+    // Shop flooring:
+    fill(100, 100, 240); // Light blue/purple
+    rect(315, -435, 620, 620);
 
     // Shop rug:
     fill(200, 0, 0);
@@ -1003,7 +957,6 @@ public class ScenePlay {
     //player.coins.draw(); // Draw the exp from the Player tab
 
     // DRAW PLAYER HEALTH HERE
-    //translate(player.x, player.y);
     // Draw the animated health bar:
     textSize(20); // Set the text size
     textAlign(CENTER, CENTER); // Set the text alignment
@@ -1021,7 +974,7 @@ public class ScenePlay {
     // Health bar text:
     fill(255);
     textSize(22);
-    text("HP: " + player.currentHealth + "/" + player.maxHealth, width/2, 670);
+    text("HP: " + (int(player.currentHealth)) + "/" + (int(player.maxHealth)), width/2, 670);
 
     // PREP FOR NEXT FRAME BLOCK
     Keyboard.update();

@@ -1,4 +1,4 @@
-// This is the Particle tab
+// This is the Particle Tab
 
 public class Particle {
 
@@ -17,16 +17,6 @@ public class Particle {
     this.x = x;
     this.y = y;
 
-    // Type 1:
-
-
-    // Type 2:
-
-
-    // Type 3:
-
-
-    // Default:
     size = random(4, 8);
     rotation = random(0, radians(360));
     rSpeed = random(-400, -100);
@@ -52,16 +42,7 @@ public class Particle {
 
   void draw() {
     noStroke();
-    // Type 1:
 
-
-    // Type 2:
-
-
-    // Type 3:
-
-
-    // Default:
     fill(25, alpha);
     pushMatrix();
     translate(x, y);

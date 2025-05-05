@@ -1,4 +1,4 @@
-// This is the Map tab
+// This is the Map Tab
 
 public class SceneMap {
 
@@ -8,11 +8,9 @@ public class SceneMap {
     // Attack Up:
     mapImage = loadImage("other_sprites/map.png");
     mapImage.resize(540, 540);
-
   }
 
   void update() {
-
   }
 
   void draw() {
@@ -31,10 +29,5 @@ public class SceneMap {
     // L to return:
     textSize(25);
     text("Press M to return to the game", width/2, height/2 + 310);
-    // Level HP:
-    //textSize(25);
-    //text("Placeholder", width/2, height/2 - 0);
-
-    //}
   }
 }

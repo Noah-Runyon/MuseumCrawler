@@ -19,10 +19,6 @@ class Coins extends AABB {
     rotateAngle = random(radians(360));
     directionAngle = random(radians(360));
 
-    //velocity.x = size * random(-350, 350);
-    //velocity.y = size * random(-350, 350);
-    //velocity.x = size * random(-20, 20);
-    //velocity.y = size * random(-20, 20);
     velocity.x = size * 15;
     velocity.y = size * 15;
   }
@@ -34,8 +30,6 @@ class Coins extends AABB {
     lifeTime -= dt;
     if (lifeTime <= 0) isDead = true;
 
-    //x += velocity.x * dt;
-    //y += velocity.y * dt;
     x += velocity.x * cos(directionAngle) * dt;
     y += velocity.y * sin(directionAngle) * dt;
 
@@ -48,7 +42,6 @@ class Coins extends AABB {
     pushMatrix();
     translate(x, y);
     rotate(rotateAngle);
-    //rect(x-halfW, y-halfH, w, h);
     rect(-halfW, -halfH, w, h);
     popMatrix();
   }

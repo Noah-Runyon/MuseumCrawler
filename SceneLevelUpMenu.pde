@@ -21,27 +21,9 @@ public class SceneLevelUpMenu {
   }
 
   void update() {
-    //if (Keyboard.onDown(Keyboard.L)) {
-    //switchToPlay();
-    //sceneLevelUpMenu = null;
-    //println("Leaving Level Up");
-    //}
-    //if (Keyboard.onDown(Keyboard.I)) {
-    //  println("Leveling HP");
-    //}
-    //if (Keyboard.onDown(Keyboard.O)) {
-    //  println("Leveling ATTACK");
-    //}
-    //if (Keyboard.onDown(Keyboard.P)) {
-    //  println("Leveling SPEED");
-    //}
   }
 
   void draw() {
-    //fill(#E06C1D);
-    //ellipse(100, 100, 100, 100);
-    //background(0);
-    //if (sceneLevelUpMenu != null) {
 
     fill(100, 150, 50); // Light Green
     rect(320, 0, width/2, height); // X Pos, Y Pos, X Size, Y Size
@@ -49,30 +31,33 @@ public class SceneLevelUpMenu {
     textAlign(CENTER, CENTER);
 
     // Set Health Up image position:
-    image(healthUpImage, width/3, height/2 - 50);
+    image(healthUpImage, width/3.7, height/2 - 150);
     // Set Attack Up image position:
-    image(attackUpImage, width/3, height/2 + 50);
+    image(attackUpImage, width/3.7, height/2 - 0);
     // Set Speed Up image position:
-    image(speedUpImage, width/3, height/2 + 150);
+    image(speedUpImage, width/3.7, height/2 + 150);
 
     // Level Up Menu:
     textSize(50);
     text("Level Up Menu", width/2, height/2 - 300);
     // Level Up Points:
     textSize(35);
-    //text("Level Up Points: " + player.exp.levelUpSpendPoints, width/2, height/2 - 200);
+    text("Level Up Points: " + scenePlay.player.exp.levelUpSpendPoints, width/2, height/2 - 225);
     // L to return:
     textSize(25);
-    text("Press L to return to the game", width/2, height/2 - 100);
+    text("Press L to return to the game", width/2, height/2 - 175);
     // Level HP:
     textSize(25);
-    text("Increase HP (I)", width/2, height/2 - 0);
+    text("Increase HP by 50 ('I')", width/2, height/2 - 100);
+    text("Current HP: " + (int(scenePlay.player.currentHealth)) + " of " + (int(scenePlay.player.maxHealth)), width/2, height/2 - 50);
     // Level ATTACK:
     textSize(25);
-    text("Increase ATTACK (O)", width/2, height/2 + 100);
+    text("Increase ATTACK by 10 ('O')", width/2, height/2 + 50);
+    text("Current Damage: " + (int(scenePlay.player.playerDamage)), width/2, height/2 + 100);
     // Level SPEED:
     textSize(25);
-    text("Increase SPEED (P)", width/2, height/2 + 200);
+    text("Increase SPEED by 100('P')", width/2, height/2 + 200);
+    text("Current Speed: " + (int(scenePlay.player.playerSpeedX)), width/2, height/2 + 250);
     //}
   }
 }

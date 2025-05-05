@@ -1,4 +1,5 @@
 // This is the Enemy1 Tab (Gingerbread Man)
+
 class Enemy1 extends Enemy {
 
   Enemy1() {

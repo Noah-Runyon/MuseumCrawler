@@ -2,9 +2,7 @@
 
 class CoinsSystem { // This Tab caculates the coins
 
-  //int level = 1;
   float currentCoins;
-  //float maxCoins;
 
   float coinsPool;
   float growSpeed = 5;
@@ -25,34 +23,15 @@ class CoinsSystem { // This Tab caculates the coins
   }
 
   void resetSystem() { // Reset the coins and Levels for a new game
-    //level = 1;
-    //maxCoins = (level + 1) * log10(level + 1) * 100;
     currentCoins = 0;
   }
 
-  //void levelUp() { // For leveling Up
-  //  level++; // +1 Level
-  //  maxCoins = (level + 1) * log10(level + 1) * 100; // Increase coins needed
-  //  currentCoins = 0; // Set back to 0 // Adjust for carry-over coins?
-  //}
-
   void update() {
-
     updateCoinsPool();
-    //coinsMapped = map(currentCoins, 0, maxCoins, 0, barWidth);
-
-    //if ((int)currentCoins >= (int)maxCoins) {
-    //if ((int)currentCoins >= (int)maxCoins) {
-    //if (ceil(currentCoins) >= (int)maxCoins) { // Make coins have the right number
-
-      //levelUp();
-    //}
   }
 
   void updateString() {
     coinsString = "Coins: " + (int)(currentCoins); // Write the coins
-    //coinsString = coinsString = (int)(currentCoins) + " / " + (int)(maxCoins);
-    //coinsString = coinsString = (int)(currentCoins) + " / " + (int)(maxCoins);
   }
 
   void updateCoinsPool() { // coins BAR EASE // Grow the coins bar:

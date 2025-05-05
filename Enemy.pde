@@ -1,4 +1,4 @@
-// This is the enemy Tab
+// This is the Enemy Tab
 
 class Enemy extends AABB {
   //float x, y;
@@ -26,11 +26,14 @@ class Enemy extends AABB {
 
   PImage enemyImage;
 
-  //float spawnLocation;
   PVector spawnLocation = new PVector();
 
+  // Chase and Attack state radius:
+  float detectionRadius = 700;
+  float attackRadius = 200;
+  float enemyDamage = 0.5;
+
   // Set up an arary
-  //ArrayList<PVector> spawnLocations = new ArrayList<PVector>();
   ArrayList<PVector> spawnLocations = new ArrayList<PVector>();
 
   public int IDLE_STATE = 1;
@@ -38,67 +41,51 @@ class Enemy extends AABB {
   public int ATTACKING_STATE = 3;
   private int currentState = 1;
 
+  float wallSpacingDistance = 50;
+
   // Room 0,2
-  float zeroTwoRoomX = random(-3750, -2500); // Default: (-3750, -2500);
-  float zeroTwoRoomY = random(-4500, -3250); // Default: (-4500, -3250);
-  //float roomZeroTwoSpawn = (zeroTwoRoomX, zeroTwoRoomY);
+  float zeroTwoRoomX = random(-3750 + wallSpacingDistance, -2500 - wallSpacingDistance); // Default: (-3750, -2500);
+  float zeroTwoRoomY = random(-4500 + wallSpacingDistance, -3250 - wallSpacingDistance); // Default: (-4500, -3250);
   PVector roomZeroTwoVector = new PVector(zeroTwoRoomX, zeroTwoRoomY);
-  //spawnLocations = append(spawnLocations, roomZeroTwoVector);
 
   // Room 0,4
-  float zeroFourRoomX = random(-3750, -2500); // Default: (-3750, -2500);
-  float zeroFourRoomY = random(-2000, -750); // Default: (-2000, -750);
-  //float roomZeroFourSpawn = (zeroFourRoomX, zeroFourRoomY);
+  float zeroFourRoomX = random(-3750 + wallSpacingDistance, -2500 - wallSpacingDistance); // Default: (-3750, -2500);
+  float zeroFourRoomY = random(-2000 + wallSpacingDistance, -750 - wallSpacingDistance); // Default: (-2000, -750);
   PVector roomZeroFourVector = new PVector(zeroFourRoomX, zeroFourRoomY);
-  //spawnLocations.add(roomZeroFourVector);
 
   // Room 6,4
-  float sixFourRoomX = random(3750, 5000); // Default: (-3750, -2500);
-  float sixFourRoomY = random(-2000, -750); // Default: (-4500, -3250);
+  float sixFourRoomX = random(3750 + wallSpacingDistance, 5000 - wallSpacingDistance); // Default: (3750, 5000);
+  float sixFourRoomY = random(-2000 + wallSpacingDistance, -750 - wallSpacingDistance); // Default: (-2000, -750);
   PVector roomSixFourVector = new PVector(sixFourRoomX, sixFourRoomY);
 
   // Room 6,2
-  float sixTwoRoomX = random(3750, 5000); // Default: (-3750, -2500);
-  float sixTwoRoomY = random(-4500, -3250); // Default: (-4500, -3250);
+  float sixTwoRoomX = random(3750 + wallSpacingDistance, 5000 - wallSpacingDistance); // Default: (3750, 5000);
+  float sixTwoRoomY = random(-4500 + wallSpacingDistance, -3250 - wallSpacingDistance); // Default: (-4500, -3250);
   PVector roomSixTwoVector = new PVector(sixTwoRoomX, sixTwoRoomY);
 
   // Room 3,0
-  float threeZeroRoomX = random(0, 1250); // Default: (-3750, -2500);
-  float threeZeroRoomY = random(-7000, -5750); // Default: (-4500, -3250);
+  float threeZeroRoomX = random(0 + wallSpacingDistance, 1250 - wallSpacingDistance); // Default: (0, 1250);
+  float threeZeroRoomY = random(-7000 + wallSpacingDistance, -5750 - wallSpacingDistance); // Default: (-7000, -5750);
   PVector roomThreeZeroVector = new PVector(threeZeroRoomX, threeZeroRoomY);
 
   // West Wing:
-  float westWingX = random(-2500, -1250);
-  float westWingY = random(-5750, 500);
+  float westWingX = random(-2500 + wallSpacingDistance, -1250 - wallSpacingDistance); // Default: (-2500, -1250)
+  float westWingY = random(-5750 + wallSpacingDistance, 500 - wallSpacingDistance); // Default: (-5750, 500)
   PVector westWingVector = new PVector(westWingX, westWingY);
 
   // East Wing:
-  float eastWingX = random(2500, 3750);
-  float eastWingY = random(-5750, 500);
+  float eastWingX = random(2500 + wallSpacingDistance, 3750 - wallSpacingDistance); // Default: (2500, 3750)
+  float eastWingY = random(-5750 + wallSpacingDistance, 500 - wallSpacingDistance); // Default: (-5750, 500)
   PVector eastWingVector = new PVector(eastWingX, eastWingY);
 
   // North Wing:
-  float northWingX = random(-2500, 3750);
-  float northWingY = random(-5750, -4500);
+  float northWingX = random(-2500 + wallSpacingDistance, 3750 - wallSpacingDistance); // Default: (-2500, 3750)
+  float northWingY = random(-5750 + wallSpacingDistance, -4500 - wallSpacingDistance); // Default: (-5750, -4500)
   PVector northWingVector = new PVector(northWingX, northWingY);
-
-  // Courtyard:
-
 
   // Spawn random enemies:
   Enemy() {
     // SPAWN:
-    //x = spawnLocation.x;
-    //y = spawnLocation.y;
-
-    //x = random(width);
-    //y = random(height);
-
-    // LOWER LEFT ROOM:
-    //x = random(zeroTwoRoomX, zeroFourRoomX);
-    //y = random(zeroTwoRoomY, zeroFourRoomY); // It's considering all the variables in-between, not just the varaibles in either
-
-    //spawnLocation = random(roomZeroFourSpawn, roomZeroTwoSpawn);
 
     // 0,2:
     spawnLocations.add(roomZeroTwoVector);
@@ -127,26 +114,6 @@ class Enemy extends AABB {
     y = spawnLocation.y; // Set Y
     //println(spawnLocation); // Print Coordinates
 
-    //// West Wing:
-    //spawnLocations.add(westWingVector);
-
-    //// East Wing:
-    //spawnLocations.add(eastWingVector);
-
-    //// North Wing:
-    //spawnLocations.add(northWingVector);
-
-
-    //void SpawnLocation(PVector roomZeroTwoVector, PVector roomZeroFourVector) {
-    //  SpawnLocation = random(roomZeroTwoVector || roomZeroFourVector);
-    //}
-
-
-    //x = spawnLocation;
-    //y = spawnLocation;
-    //spawnLocation = random(zeroFourRoomX && zeroFourRoomY || zeroTwoRoomX && zeroTwoRoomY);
-
-
     diameter = random(50, 150); // Set random diameter size in a range
     setSize(diameter, diameter);
 
@@ -164,9 +131,9 @@ class Enemy extends AABB {
     // Make speed direction towards player
     // If player is within 500 pixels of enemy()
     // if (scenePlay.player.x <= 500 && scenePlay.player.y <= 500) {
-    if (distanceToPlayer <= 700) { // It's less than 0, is not less than -1, and is not equal to -1, 0, or 1
+    if (distanceToPlayer <= detectionRadius) { // It's less than 0, is not less than -1, and is not equal to -1, 0, or 1
       currentState = CHASING_STATE;
-      if (distanceToPlayer <= 200) {
+      if (distanceToPlayer <= attackRadius) {
         currentState = ATTACKING_STATE;
       }
     }
@@ -187,7 +154,7 @@ class Enemy extends AABB {
 
     // ATTACKING State:
     if (currentState == ATTACKING_STATE) {
-      scenePlay.player.currentHealth -= 1; // Reduce Player HP
+      scenePlay.player.currentHealth -= enemyDamage; // Reduce Player HP
       playerDamaged.play(); // Player damage noise on collision
     }
 
@@ -199,7 +166,7 @@ class Enemy extends AABB {
     if (currentHealth <= 0) {
       isDead = true;
       //player.exp.expPool += expAmount;
-      
+
       enemyDefeated.play();
 
       // EXP Amount
@@ -217,18 +184,18 @@ class Enemy extends AABB {
         Coins c = new Coins(x, y, chunkCoins);
         scenePlay.coins.add(c);
       }
-      
+
       Particle r = new Particle(x, y);
       // Particle Type: p.particleType = 1;
       scenePlay.particles.add(r);
-      
+
       int numParticles = (int)random(20, 40); // Amount of particles
-      for(int i = 0; i < numParticles; i++) {
-       Particle p = new Particle(x, y);
-       p.velocity.x = random(-200, 200); // Particle speed in the X
-       p.velocity.y = random(-200, 200); // Particle speed in the Y
-       // p.particleType = 1;
-       scenePlay.particles.add(p);
+      for (int i = 0; i < numParticles; i++) {
+        Particle p = new Particle(x, y);
+        p.velocity.x = random(-200, 200); // Particle speed in the X
+        p.velocity.y = random(-200, 200); // Particle speed in the Y
+        // p.particleType = 1;
+        scenePlay.particles.add(p);
       }
     }
   }

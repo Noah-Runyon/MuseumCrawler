@@ -1,4 +1,5 @@
 // This is the Enemy3 Tab (Old-Timey Photograph)
+
 class Enemy3 extends Enemy {
 
   Enemy3() {

@@ -6,7 +6,7 @@ public class SceneInstructions {
 
   SceneInstructions() {
     // Set the background image and size:
-    instructions1Image = loadImage("title_sprites/instructions_1.png");
+    instructions1Image = loadImage("title_sprites/instructions.png");
     instructions1Image.resize(width, height);
   }
 
@@ -33,8 +33,19 @@ public class SceneInstructions {
     fill(0);
     textSize(30);
     textAlign(CENTER, CENTER);
-    text("Dungeon Crawler Instructions", width/2, height/2 - 50);
+    text("Museum Crawler Instructions", width/2, height/2 - 125);
     textSize(20);
-    text("Press T to return to title", width/2, height/2);
+    text("Press 'T' to return to title", width/2, height/2 - 75);
+    text("You are infiltrating Oddity Museum", width/2, height/2 - 30);
+    text("Defeat enemies to get EXP and Coins", width/2, height/2 + 0);
+    text("WSAD for Movement", width/2, height/2 + 30);
+    text("Left-Click for Melee Paintbrush Attack", width/2, height/2 + 60);
+    text("Right-Click for Ranged Paintball Attack", width/2, height/2 + 90);
+    text("Press 'L' to access the level-up menu and get upgrades", width/2, height/2 + 120);
+    text("Press 'H' while at the shop to spend Coins", width/2, height/2 + 150);
+    text("Press 'M' to access your Oddity Museum Map", width/2, height/2 + 180);
+    text("Press 'SPACE BAR' to Dash", width/2, height/2 + 210);
+    text("You start with 150 HP, 10 ATTACK, 500 SPEED", width/2, height/2 + 240);
+    text("and 1500 DASH", width/2, height/2 + 270);
   }
 }

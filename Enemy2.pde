@@ -1,4 +1,5 @@
 // This is the Enemy2 Tab (Abstract Painting)
+
 class Enemy2 extends Enemy {
 
   Enemy2() {

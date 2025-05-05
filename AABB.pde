@@ -20,11 +20,6 @@ public class AABB {
     // constructor code
   }
 
-  //@Override public void update(float dt) {
-  //  super.update(dt);
-  //  calcEdges();
-  //}
-
   public void update() {
     //update(dt);
     calcEdges(); // Calculate the edges
@@ -37,8 +32,8 @@ public class AABB {
     edgeT = y - halfH; // Set the top edge
     edgeB = y + halfH; // Set the bottom edge
   }
-  
-  // Set size: 
+
+  // Set size:
   public void setSize(float w, float h) {
     this.w = w;
     this.h = h;
@@ -46,8 +41,8 @@ public class AABB {
     halfH = h/2;
     calcEdges();
   }
-  
-  // Check for overlap between entities: 
+
+  // Check for overlap between entities:
   public boolean checkOverlap(AABB other) {
     if (edgeR < other.edgeL) return false;
     if (edgeL > other.edgeR) return false;
@@ -55,8 +50,8 @@ public class AABB {
     if (edgeT > other.edgeB) return false;
     return true;
   }
-  
-  // Fix Overlap by pushing entities back: 
+
+  // Fix Overlap by pushing entities back:
   public void fixOverlap(AABB other) {
     float pushUp = edgeB - other.edgeT; // Push the player up so they can walk on top of the platforms
     float pushLeft = edgeR - other.edgeL; // Push the player left when they hit the side of platforms
@@ -64,15 +59,15 @@ public class AABB {
     if (pushUp <= pushLeft) setBottomEdge(other.edgeT);
     else setRightEdge(other.edgeL);
   }
-  
-  // Set bottom edge: 
+
+  // Set bottom edge:
   public void setBottomEdge(float Y) {
     y = Y - halfH;
     velocity.y = 0;
     calcEdges();
   }
-  
-  // Set right edge: 
+
+  // Set right edge:
   public void setRightEdge(float X) {
     x = X - halfW;
     velocity.x = 0;
@@ -110,7 +105,7 @@ public class AABB {
     return result;
   }
 
-  // Stop entities from moving on collision: 
+  // Stop entities from moving on collision:
   void applyFix(PVector fix) {
     x += fix.x;
     y += fix.y;

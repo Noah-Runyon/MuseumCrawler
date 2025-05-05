@@ -44,8 +44,6 @@ class ExperienceSystem { // This Tab caculates the experience
     updateExpPool();
     expMapped = map(currentExperience, 0, maxExperience, 0, barWidth);
 
-    //if ((int)currentExperience >= (int)maxExperience) {
-    //if ((int)currentExperience >= (int)maxExperience) {
     if (ceil(currentExperience) >= (int)maxExperience) { // Make experience have the right number
 
       levelUp();
@@ -54,8 +52,6 @@ class ExperienceSystem { // This Tab caculates the experience
 
   void updateString() {
     expString = "Lvl: " + level + "      XP: " + (int)(currentExperience) + " / " + (int)(maxExperience); // Write the level and EXP
-    //expString = expString = (int)(currentExperience) + " / " + (int)(maxExperience);
-    //expString = expString = (int)(currentExperience) + " / " + (int)(maxExperience);
   }
 
   void updateExpPool() { // EXP BAR EASE // Grow the EXP bar:
